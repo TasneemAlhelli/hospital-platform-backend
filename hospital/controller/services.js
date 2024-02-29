@@ -17,7 +17,18 @@ const getservice = async (req, res) => {
     console.log(error)
   }
 }
+
+const addservice = async (req, res) => {
+  try {
+    const newService = await Service.create(req.body)
+    res.send(newService)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
   getservices,
-  getservice
+  getservice,
+  addservice
 }

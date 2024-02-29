@@ -17,8 +17,17 @@ const getDoctor = async (req, res) => {
     console.log(error)
   }
 }
+const addDoctor = async (req, res) => {
+  try {
+    const newDoctor = await Doctor.create(req.body)
+    res.send(newDoctor)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 module.exports = {
   getDoctors,
-  getDoctor
+  getDoctor,
+  addDoctor
 }

@@ -9,7 +9,7 @@ const getAppointments = async (req, res) => {
 
 const addAppointment = async (req, res) => {
   try {
-    const newAppointment = await Appointment.creat(req.body)
+    const newAppointment = await Appointment.create(req.body)
     const user = await User.findById(req.params.userId)
     user.appointments.push(newAppointment._id)
     await user.save().populate('appointments')
