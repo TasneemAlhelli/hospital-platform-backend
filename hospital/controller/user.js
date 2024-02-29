@@ -10,16 +10,17 @@ const getAppointments = async (req, res) => {
 const addAppointment = async (req, res) => {
   try {
     const newAppointment = await Appointment.create(req.body)
-    const user = await User.findById(req.params.userId)
+    let user = await User.findById(req.params.userId)
     user.appointments.push(newAppointment._id)
-    await user.save().populate('appointments')
+    await user.save()
+    user = await user.populate('appointments')
     res.send(user)
   } catch (error) {
     console.log(error)
   }
 }
 
-const deleteAppointment = async () => {
+const deleteAppointment = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
     const deletedappointmentIndex = user.appointments.findIndex(
@@ -27,8 +28,8 @@ const deleteAppointment = async () => {
     )
     user.appointments.splice(deletedappointmentIndex, 1)
     await user.save()
-    await Appointment.deleteOne({ _id: req.params.appoimentId })
-    res.send({ msg: 'Deleted', status: 'Ok' })
+    //await Appointment.deleteOne({ _id: req.params.appoimentId })
+    res.send(user)
   } catch (error) {
     console.log(error)
   }
