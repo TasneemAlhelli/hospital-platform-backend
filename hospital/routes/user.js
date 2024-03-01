@@ -10,5 +10,6 @@ router.delete(
   '/user/:userId/appointment/:appoimentId',
   userCtrl.deleteAppointment
 )
+router.get('/user/:userId/appointments/:status', userCtrl.appointmentStatus)
 
 module.exports = router

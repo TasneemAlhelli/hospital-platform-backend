@@ -25,9 +25,33 @@ const addDoctor = async (req, res) => {
     console.log(error)
   }
 }
+const doctorSlot = async (req, res) => {
+  try {
+    const doctor = await Doctor.findById(req.params.id).populate('appointments')
+    let doctorStartShift = new Date(doctor.schedule.start)
+    let doctorEndShift = new Date(doctor.schedule.end)
+    let avalibleSlot = []
+    while (doctorStartShift < doctorEndShift) {
+      const isReserved = doctor.appointments.some(
+        (appointment) =>
+          doctorStartShift >= appointment.time &&
+          doctorStartShift < appointment.time + 20
+      )
+
+      if (!isReserved) {
+        availableTimeSlots.push(currentTime)
+      }
+
+      doctorStartShift.setMinutes(doctorStartShift.getMinutes() + 20)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 module.exports = {
   getDoctors,
   getDoctor,
-  addDoctor
+  addDoctor,
+  doctorSlot
 }
