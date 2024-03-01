@@ -9,7 +9,7 @@ const getUserInfo = async (req, res) => {
   }
 }
 
-const updateUserInfo =async (req,res) => {
+const updateUserInfo = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body)
     res.send(user)
@@ -28,7 +28,25 @@ const getAppointments = async (req, res) => {
     console.log(error)
   }
 }
-
+const appointmentStatus = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).populate('appointments')
+    let appointments = []
+    const today = new Date()
+    if (req.params.status === 'complated') {
+      appointments = user.appointments.filter((appointment) => {
+        return appointment.date < today
+      })
+    } else if (req.params.status === 'schedule') {
+      appointments = user.appointments.filter((appointment) => {
+        return appointment.date >= today
+      })
+    }
+    res.send(appointments)
+  } catch (error) {
+    console.log(error)
+  }
+}
 const addAppointment = async (req, res) => {
   try {
     const newAppointment = await Appointment.create(req.body)
@@ -62,5 +80,6 @@ module.exports = {
   updateUserInfo,
   getAppointments,
   addAppointment,
-  deleteAppointment
+  deleteAppointment,
+  appointmentStatus
 }
