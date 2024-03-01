@@ -15,7 +15,7 @@ const Register = async (req, res) => {
         .send('A user with that email has already been registered!')
     } else {
       // Creates a new user
-      const user = await User.create({ name, email, passwordDigest })
+      const user = await User.create(req.body)
       // Sends the user as a response
       res.send(user)
     }
@@ -81,12 +81,10 @@ const UpdatePassword = async (req, res) => {
       .send({ status: 'Error', msg: 'Old Password did not match!' })
   } catch (error) {
     console.log(error)
-    res
-      .status(401)
-      .send({
-        status: 'Error',
-        msg: 'An error has occurred updating password!'
-      })
+    res.status(401).send({
+      status: 'Error',
+      msg: 'An error has occurred updating password!'
+    })
   }
 }
 
