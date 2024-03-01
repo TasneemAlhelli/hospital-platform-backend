@@ -31,18 +31,19 @@ const getAppointments = async (req, res) => {
 const appointmentStatus = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId).populate('appointments')
-    let appointments = []
+    console.log(user)
+    let app = []
     const today = new Date()
     if (req.params.status === 'complated') {
-      appointments = user.appointments.filter((appointment) => {
-        return appointment.date < today
+      app = user.appointments.filter((appointment) => {
+        return new Date(appointment.date) < today
       })
     } else if (req.params.status === 'schedule') {
-      appointments = user.appointments.filter((appointment) => {
-        return appointment.date >= today
+      app = user.appointments.filter((appointment) => {
+        return new Date(appointment.date) >= today
       })
     }
-    res.send(appointments)
+    res.send(app)
   } catch (error) {
     console.log(error)
   }

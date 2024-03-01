@@ -12,8 +12,13 @@ const doctorSchema = new Schema(
       type: String,
       enum: ['Male', 'Female', 'Unknown'],
       default: 'Unknown'
-    }, 
-    service: {type: Schema.Types.ObjectId, ref: 'Service'}
+    },
+    service: { type: Schema.Types.ObjectId, ref: 'Service' },
+    schedule: {
+      start: Date,
+      end: Date
+    },
+    appointments: [{ type: Schema.Types.ObjectId, ref: 'Appointment' }]
   },
   {
     timestamps: true
