@@ -14,7 +14,23 @@ const userSchema = new Schema(
       default: 'Unknown'
     },
     birthDate: Date,
-    appointments: [{ type: Schema.Types.ObjectId, ref: 'Appointment' }]
+    appointments: [{ type: Schema.Types.ObjectId, ref: 'Appointment' }],
+    medicalConditions: [
+      {
+        type: String,
+        enum: [
+          'diabetes',
+          'hypertension',
+          'asthma',
+          'arthritis',
+          'cancer',
+          'allergies',
+          'heart disease',
+          'mental health conditions',
+          'other'
+        ]
+      }
+    ]
   },
   {
     timestamps: true

@@ -14,7 +14,8 @@ const serviceSchema = new Schema(
       type: String,
       enum: ['Male', 'Female', 'Unknown'],
       default: 'Unknown'
-    }
+    },
+    specialization: String
   },
   {
     timestamps: true
