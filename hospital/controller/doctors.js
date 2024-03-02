@@ -1,4 +1,4 @@
-const { Doctor } = require('../models')
+const { Doctor, Service } = require('../models')
 
 const getDoctors = async (req, res) => {
   try {
@@ -20,6 +20,10 @@ const getDoctor = async (req, res) => {
 const addDoctor = async (req, res) => {
   try {
     const newDoctor = await Doctor.create(req.body)
+    const serviceId = newDoctor.service
+    const service = await Service.findById(serviceId)
+    service.doctors.push(newDoctor._id)
+    await service.save()
     res.send(newDoctor)
   } catch (error) {
     console.log(error)

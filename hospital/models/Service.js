@@ -12,8 +12,8 @@ const serviceSchema = new Schema(
     maxAge: Number,
     c: {
       type: String,
-      enum: ['Male', 'Female', 'Both'],
-      default: 'Both'
+      enum: ['Male', 'Female', 'All'],
+      default: 'All'
     },
     specialization: String
   },
