@@ -10,10 +10,10 @@ const serviceSchema = new Schema(
     doctors: [{ type: Schema.Types.ObjectId, ref: 'Doctor' }],
     minAge: Number,
     maxAge: Number,
-    genderInterest: {
+    c: {
       type: String,
-      enum: ['Male', 'Female', 'Unknown'],
-      default: 'Unknown'
+      enum: ['Male', 'Female', 'Both'],
+      default: 'Both'
     },
     specialization: String
   },
