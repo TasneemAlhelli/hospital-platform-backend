@@ -15,8 +15,8 @@ const doctorSchema = new Schema(
     },
     service: { type: Schema.Types.ObjectId, ref: 'Service' },
     schedule: {
-      start: Date,
-      end: Date
+      start: String,
+      end: String
     },
     appointments: [{ type: Schema.Types.ObjectId, ref: 'Appointment' }]
   },
