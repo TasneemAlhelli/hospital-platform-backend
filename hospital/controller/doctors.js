@@ -39,31 +39,31 @@ const doctorSlot = async (req, res) => {
 
     const doctor = await Doctor.findById(req.params.id).populate('appointments')
 
-    const allAppintments = doctor.appointments.filter(
+    const allApointments = doctor.appointments.filter(
       (appointment) => format(appointment.date, 'yyyy-MM-dd') === date
     )
 
-    const allAppintmentsTime = allAppintments.map(
+    const allApointmentsTime = allApointments.map(
       (appointment) => appointment.time
     )
 
     let doctorStartShift = doctor.schedule.start
     let doctorEndShift = doctor.schedule.end
 
-    let avalibleSlots = []
+    let availableSlots = []
     let currentTime = moment(doctorStartShift, 'HH:mm')
 
     while (moment(currentTime).isBefore(moment(doctorEndShift, 'HH:mm'))) {
       const slot = currentTime.format('HH:mm')
 
-      if (!allAppintmentsTime.includes(slot)) {
-        avalibleSlots.push(slot)
+      if (!allApointmentsTime.includes(slot)) {
+        availableSlots.push(slot)
       }
 
       currentTime.add(20, 'minutes')
     }
 
-    res.send(avalibleSlots)
+    res.send(availableSlots)
   } catch (error) {
     console.log(error)
   }
