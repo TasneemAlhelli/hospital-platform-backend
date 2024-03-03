@@ -4,7 +4,7 @@ require('dotenv').config()
 
 const getservices = async (req, res) => {
   try {
-    const services = await Service.find({})
+    const services = await Service.find({}).populate('doctors')
     res.send(services)
   } catch (error) {
     console.log(error)
