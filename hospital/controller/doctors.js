@@ -1,5 +1,5 @@
-const { Doctor } = require('../models')
-
+const { Doctor, Service } = require('../models')
+const moment = require('moment')
 const getDoctors = async (req, res) => {
   try {
     const doctors = await Doctor.find({})
@@ -20,6 +20,10 @@ const getDoctor = async (req, res) => {
 const addDoctor = async (req, res) => {
   try {
     const newDoctor = await Doctor.create(req.body)
+    const serviceId = newDoctor.service
+    const service = await Service.findById(serviceId)
+    service.doctors.push(newDoctor._id)
+    await service.save()
     res.send(newDoctor)
   } catch (error) {
     console.log(error)
@@ -27,23 +31,25 @@ const addDoctor = async (req, res) => {
 }
 const doctorSlot = async (req, res) => {
   try {
+    const { date } = req.body
     const doctor = await Doctor.findById(req.params.id).populate('appointments')
-    let doctorStartShift = new Date(doctor.schedule.start)
-    let doctorEndShift = new Date(doctor.schedule.end)
-    let avalibleSlot = []
-    while (doctorStartShift < doctorEndShift) {
-      const isReserved = doctor.appointments.some(
-        (appointment) =>
-          doctorStartShift >= appointment.time &&
-          doctorStartShift < appointment.time + 20
-      )
+    const allAppintments = doctor.appointments.filter(
+      (appointment) => appointment.date == date
+    )
+    const allAppintmentsTime = allAppintments.map((a) => a.time)
+    let doctorStartShift = doctor.schedule.start
+    let doctorEndShift = doctor.schedule.end
+    let avalibleSlots = []
+    let currentTime = moment(doctorStartShift, 'HH:mm')
 
-      if (!isReserved) {
-        availableTimeSlots.push(currentTime)
+    while (moment(currentTime).isBefore(moment(doctorEndShift, 'HH:mm'))) {
+      if (!allAppintmentsTime.includes(currentTime)) {
+        avalibleSlots.push(moment(currentTime).format('HH:mm'))
+        currentTime.add(20, 'minutes')
       }
-
-      doctorStartShift.setMinutes(doctorStartShift.getMinutes() + 20)
     }
+    console.log(avalibleSlots)
+    res.send(avalibleSlots)
   } catch (error) {
     console.log(error)
   }
