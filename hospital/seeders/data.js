@@ -39,7 +39,7 @@ const createData = async () => {
         }
       },
       {
-        image: '',
+        image: 'https://cdn-icons-png.flaticon.com/512/3774/3774299.png',
         name: 'Dr. Sarah Johnson',
         email: 'sarahjohnson@example.com',
         experience: 12,
