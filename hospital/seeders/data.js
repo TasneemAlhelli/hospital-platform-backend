@@ -425,7 +425,7 @@ const createData = async () => {
       price: 100,
       minAge: 16,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'General Medicine',
       doctors: []
     },
@@ -438,7 +438,7 @@ const createData = async () => {
       price: 80,
       minAge: 0,
       maxAge: 18,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Pediatrics'
     },
     {
@@ -450,7 +450,7 @@ const createData = async () => {
       price: 120,
       minAge: 18,
       maxAge: null,
-      genderInterest: 'Female',
+      gender: 'Female',
       specialization: 'Obstetrics and Gynecology'
     },
     {
@@ -462,7 +462,7 @@ const createData = async () => {
       price: 120,
       minAge: 18,
       maxAge: null,
-      genderInterest: 'Male',
+      gender: 'Male',
       specialization: 'Urology'
     },
     {
@@ -474,7 +474,7 @@ const createData = async () => {
       price: 150,
       minAge: 5,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Dentistry'
     },
     {
@@ -486,7 +486,7 @@ const createData = async () => {
       price: 200,
       minAge: 10,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Dermatology'
     },
     {
@@ -498,7 +498,7 @@ const createData = async () => {
       price: 250,
       minAge: 18,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Cardiology'
     },
     {
@@ -510,7 +510,7 @@ const createData = async () => {
       price: 180,
       minAge: 10,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Orthopedics'
     },
     {
@@ -522,7 +522,7 @@ const createData = async () => {
       price: 150,
       minAge: 12,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Psychiatry'
     },
     {
@@ -534,7 +534,7 @@ const createData = async () => {
       price: 180,
       minAge: 5,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Physical Therapy'
     },
     {
@@ -546,7 +546,7 @@ const createData = async () => {
       price: 200,
       minAge: 5,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Occupational Therapy'
     },
     {
@@ -558,7 +558,7 @@ const createData = async () => {
       price: 120,
       minAge: 5,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Allergology'
     },
     {
@@ -570,7 +570,7 @@ const createData = async () => {
       price: 300,
       minAge: 16,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Radiology'
     },
     {
@@ -582,7 +582,7 @@ const createData = async () => {
       price: 150,
       minAge: 18,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Endocrinology'
     },
     {
@@ -594,7 +594,7 @@ const createData = async () => {
       price: 100,
       minAge: 5,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Nutrition'
     },
     {
@@ -606,7 +606,7 @@ const createData = async () => {
       price: 200,
       minAge: 18,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Sleep Medicine'
     },
     {
@@ -618,7 +618,7 @@ const createData = async () => {
       price: 150,
       minAge: 18,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Nutrition and Weight Management'
     },
     {
@@ -630,7 +630,7 @@ const createData = async () => {
       price: 200,
       minAge: 18,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Oncology'
     },
     {
@@ -642,7 +642,7 @@ const createData = async () => {
       price: 150,
       minAge: 5,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Pulmonology'
     },
     {
@@ -653,7 +653,7 @@ const createData = async () => {
       price: 250,
       minAge: 18,
       maxAge: null,
-      genderInterest: 'All',
+      gender: 'All',
       specialization: 'Gastroenterology'
     }
   ]

@@ -17,12 +17,22 @@ const filterServices = async (req, res) => {
     let payload = jwt.verify(token, APP_SECRET)
     let userId = payload.id
     const user = await User.findById(userId)
+
+    let currentDate = new Date()
+    let birthDate = new Date(user.birthDate)
+    let timeDiff = currentDate.getTime() - birthDate.getTime()
+    let age = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 365.25))
+
     const filterServices = await Service.find({
-      minAge: { $lte: user.age },
-      maxAge: { $gte: user.age },
-      specialization: { $in: [user.medicalConditions, 'other'] },
-      $or: [{ gender: 'all' }, { gender: user.gender }]
+      // minAge: { $lte: age },
+      // $or: [{ maxAge: { $gte: age } }, { maxAge: null }],
+      $or: [{ gender: 'All' }, { gender: user.gender }]
+
+      // maxAge: { $gte: age },
+      // specialization: { $in: [user.medicalConditions, 'other'] },
+      // $or: [{ gender: 'All' }, { gender: user.gender }]
     })
+    console.log('filterServices', filterServices)
     res.send(filterServices)
   } catch (error) {
     console.log(error)
