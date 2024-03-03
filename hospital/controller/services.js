@@ -1,6 +1,7 @@
 const { Service, User } = require('../models')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
+const APP_SECRET = process.env.APP_SECRET
 
 const getservices = async (req, res) => {
   try {

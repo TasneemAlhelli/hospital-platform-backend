@@ -176,3 +176,126 @@ const serviceSchema = new mongoose.Schema({
 const Service = mongoose.model('Service', serviceSchema)
 
 module.exports = Service
+
+import React, { useState } from 'react'
+
+const MyComponent = () => {
+  const [schedule, setSchedule] = useState({
+    start: '',
+    end: ''
+  })
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target
+    setSchedule((prevSchedule) => ({
+      ...prevSchedule,
+      [name]: value
+    }))
+  }
+
+  return (
+    <div>
+      <label htmlFor="startTime">Start Time:</label>
+      <input
+        type="time"
+        id="startTime"
+        name="start"
+        value={schedule.start}
+        onChange={handleInputChange}
+      />
+
+      <label htmlFor="endTime">End Time:</label>
+      <input
+        type="time"
+        id="endTime"
+        name="end"
+        value={schedule.end}
+        onChange={handleInputChange}
+      />
+
+      <p>Start Time: {schedule.start}</p>
+      <p>End Time: {schedule.end}</p>
+    </div>
+  )
+}
+
+export default MyComponent
+// -------------------
+
+const moment = require('moment');
+
+// Retrieve the doctor by their ID
+const doctor = await Doctor.findById(doctorId);
+
+// Get the doctor's schedule
+const { start, end } = doctor.schedule;
+
+// Retrieve the existing appointments for the doctor
+const existingAppointments = await Appointment.find({
+  doctor: doctorId,
+  completed: false
+});
+
+// Function to generate all possible time slots within the doctor's schedule
+const generateTimeSlots = (start, end, interval) => {
+  const timeSlots = [];
+  let currentTime = moment(start, 'HH:mm');
+
+  while (moment(currentTime).isBefore(moment(end, 'HH:mm'))) {
+    timeSlots.push(moment(currentTime).format('HH:mm'));
+    currentTime.add(interval, 'minutes');
+  }
+
+  return timeSlots;
+};
+
+// Generate all possible time slots within the doctor's schedule
+const allTimeSlots = generateTimeSlots(start, end, 15); // Adjust the interval as needed
+
+// Function to filter available time slots based on chosen date
+const filterTimeSlotsByDate = (date, timeSlots, appointments) => {
+  const chosenDateAppointments = appointments.filter(appointment =>
+    moment(appointment.date).isSame(date, 'day')
+  )
+
+  const bookedTimeSlots = chosenDateAppointments.map(appointment => appointment.time);
+
+  const availableTimeSlots = timeSlots.filter(
+    timeSlot => !bookedTimeSlots.includes(timeSlot)
+  )
+
+  return availableTimeSlots;
+};
+
+// Present available dates to the user and let them choose a date
+const availableDates = existingAppointments
+  .map(appointment => moment(appointment.date).format('YYYY-MM-DD'))
+  .filter((date, index, self) => self.indexOf(date) === index);
+
+// Let the user choose a date
+const chosenDate = ...; // Get the chosen date from the user
+
+// Filter available time slots based on chosen date
+const availableTimeSlots = filterTimeSlotsByDate(
+  chosenDate,
+  allTimeSlots,
+  existingAppointments
+);
+
+// Present available time slots to the user and let them choose a time
+// Let the user choose a time
+const chosenTime = ...; // Get the chosen time from the user
+
+// Once the user has chosen a date and time, you can proceed with creating the appointment
+const appointment = new Appointment({
+  doctor: doctorId,
+  user: userId,
+  date: chosenDate,
+  time: chosenTime,
+  completed: false
+});
+
+// Save the appointment to the database
+await appointment.save();
+
+console.log('Appointment created successfully!');

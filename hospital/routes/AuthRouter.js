@@ -7,8 +7,8 @@ router.post('/register', controller.Register)
 
 router.get(
   '/session',
-  middleware.stripToken,
-  middleware.verifyToken,
+  // middleware.stripToken,
+  // middleware.verifyToken,
   controller.CheckSession
 )
 
