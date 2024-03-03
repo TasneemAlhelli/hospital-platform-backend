@@ -5,7 +5,7 @@ const APP_SECRET = process.env.APP_SECRET
 
 const getservices = async (req, res) => {
   try {
-    const services = await Service.find({})
+    const services = await Service.find({}).populate('doctors')
     res.send(services)
   } catch (error) {
     console.log(error)
@@ -13,17 +13,21 @@ const getservices = async (req, res) => {
 }
 const filterServices = async (req, res) => {
   try {
-    const { token } = res.locals
+    // let token = req.header
+    const token = req.headers['authorization'].split(' ')[1]
+
+    console.log('token', token)
     let payload = jwt.verify(token, APP_SECRET)
     let userId = payload.id
     const user = await User.findById(userId)
     const filterServices = await Service.find({
-      minAge: { $lte: user.age },
-      maxAge: { $gte: user.age },
-      specialization: { $in: [user.medicalConditions, 'other'] },
+      // minAge: { $lte: user.age },
+      // maxAge: { $gte: user.age },
+      specialization: { $in: [...user.medicalConditions, 'other'] },
       $or: [{ gender: 'all' }, { gender: user.gender }]
     })
     res.send(filterServices)
+    console.log('filterServices', filterServices)
   } catch (error) {
     console.log(error)
   }

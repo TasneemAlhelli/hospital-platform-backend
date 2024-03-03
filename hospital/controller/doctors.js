@@ -11,7 +11,7 @@ const getDoctors = async (req, res) => {
 
 const getDoctor = async (req, res) => {
   try {
-    const doctor = await Doctor.findById(req.params.id)
+    const doctor = await Doctor.findById(req.params.id).populate('service')
     res.send(doctor)
   } catch (error) {
     console.log(error)
