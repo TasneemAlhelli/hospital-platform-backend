@@ -1,4 +1,4 @@
-const { User, Appointment } = require('../models')
+const { User, Appointment, Doctor } = require('../models')
 
 const getUserInfo = async (req, res) => {
   try {
@@ -51,11 +51,18 @@ const appointmentStatus = async (req, res) => {
 const addAppointment = async (req, res) => {
   try {
     const newAppointment = await Appointment.create(req.body)
-    let user = await User.findById(req.params.userId)
+
+    const userId = res.locals.payload.id
+
+    let user = await User.findById(userId)
     user.appointments.push(newAppointment._id)
     await user.save()
-    user = await user.populate('appointments')
-    res.send(user)
+
+    let doctor = await Doctor.findById(req.body.doctor)
+    doctor.appointments.push(newAppointment._id)
+    await doctor.save()
+
+    res.send(newAppointment)
   } catch (error) {
     console.log(error)
   }
