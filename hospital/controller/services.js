@@ -26,7 +26,7 @@ const filterServices = async (req, res) => {
     let filter = {
       minAge: { $lte: age },
       $or: [{ maxAge: { $gte: age } }, { maxAge: null }],
-      $or: [{ gender: 'All' }, { gender: user.gender }],
+      $or: [{ gender: 'All' }, { gender: user.gender }]
       // specialization: {
       //   $in:
       //     user.medicalConditions.length > 0
@@ -35,7 +35,7 @@ const filterServices = async (req, res) => {
       // }
     }
 
-    const filterServices = await Service.find(filter)
+    const filterServices = await Service.find(filter).limit(4)
     res.send(filterServices)
   } catch (error) {
     console.log(error)
