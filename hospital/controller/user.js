@@ -1,8 +1,9 @@
+const { format } = require('date-fns')
 const { User, Appointment, Doctor } = require('../models')
 
 const getUserInfo = async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId)
+    const user = await User.findById(res.locals.payload.id)
     res.send(user)
   } catch (error) {
     console.log(error)
@@ -20,30 +21,30 @@ const updateUserInfo = async (req, res) => {
 
 const getAppointments = async (req, res) => {
   try {
-    console.log('userId', req.params.userId)
-    const user = await User.findById(req.params.userId).populate('appointments')
-    //console.log(user)
+    const userId = res.locals.payload.id
+    const user = await User.findById(userId).populate('appointments')
     res.send(user.appointments)
   } catch (error) {
     console.log(error)
   }
 }
+
 const appointmentStatus = async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId).populate('appointments')
-    console.log(user)
-    let app = []
-    const today = new Date()
-    if (req.params.status === 'complated') {
-      app = user.appointments.filter((appointment) => {
-        return new Date(appointment.date) < today
-      })
-    } else if (req.params.status === 'schedule') {
-      app = user.appointments.filter((appointment) => {
-        return new Date(appointment.date) >= today
-      })
-    }
-    res.send(app)
+    const userId = res.locals.payload.id
+    const user = await User.findById(userId).populate('appointments')
+    const today = format(new Date(), 'yyyy-MM-dd')
+
+    let apps = user.appointments.filter((appointment) => {
+      const appDate = format(new Date(appointment.date), 'yyyy-MM-dd')
+      if (req.params.status === 'completed') {
+        return appDate < today
+      } else {
+        return appDate >= today
+      }
+    })
+
+    res.send(apps)
   } catch (error) {
     console.log(error)
   }
