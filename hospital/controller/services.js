@@ -23,16 +23,19 @@ const filterServices = async (req, res) => {
     let timeDiff = currentDate.getTime() - birthDate.getTime()
     let age = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 365.25))
 
-    const filterServices = await Service.find({
-      // minAge: { $lte: age },
-      // $or: [{ maxAge: { $gte: age } }, { maxAge: null }],
-      $or: [{ gender: 'All' }, { gender: user.gender }]
+    let filter = {
+      minAge: { $lte: age },
+      $or: [{ maxAge: { $gte: age } }, { maxAge: null }],
+      $or: [{ gender: 'All' }, { gender: user.gender }],
+      // specialization: {
+      //   $in:
+      //     user.medicalConditions.length > 0
+      //       ? [user.medicalConditions, 'other']
+      //       : 'other'
+      // }
+    }
 
-      // maxAge: { $gte: age },
-      // specialization: { $in: [user.medicalConditions, 'other'] },
-      // $or: [{ gender: 'All' }, { gender: user.gender }]
-    })
-    console.log('filterServices', filterServices)
+    const filterServices = await Service.find(filter)
     res.send(filterServices)
   } catch (error) {
     console.log(error)
