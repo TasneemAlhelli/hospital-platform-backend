@@ -19,12 +19,14 @@ const filterServices = async (req, res) => {
       let payload = jwt.verify(token, APP_SECRET)
       let userId = payload.id
       const user = await User.findById(userId)
+      console.log(user)
       const filterServices = await Service.find({
         minAge: { $lte: payload.age },
         maxAge: { $gte: payload.age },
         specialization: { $in: [...user.medicalConditions, 'other'] },
-        $or: [{ gender: 'all' }, { gender: user.gender }]
+        $or: [{ gender: 'All' }, { gender: user.gender }]
       })
+
       res.send(filterServices)
       console.log('filterServices', filterServices)
     } else {
