@@ -28,7 +28,7 @@ const filterServices = async (req, res) => {
       })
 
       res.send(filterServices)
-      console.log('filterServices', filterServices)
+      // console.log('filterServices', filterServices)
     } else {
       console.log('token not find')
     }

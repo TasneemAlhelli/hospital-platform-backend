@@ -1,4 +1,6 @@
-const { Doctor, Service } = require('../models')
+const { Doctor, Service, Appointment } = require('../models')
+const { format } = require('date-fns')
+
 const moment = require('moment')
 const getDoctors = async (req, res) => {
   try {
@@ -17,6 +19,7 @@ const getDoctor = async (req, res) => {
     console.log(error)
   }
 }
+
 const addDoctor = async (req, res) => {
   try {
     const newDoctor = await Doctor.create(req.body)
@@ -29,26 +32,37 @@ const addDoctor = async (req, res) => {
     console.log(error)
   }
 }
+
 const doctorSlot = async (req, res) => {
   try {
     const { date } = req.body
+
     const doctor = await Doctor.findById(req.params.id).populate('appointments')
+
     const allAppintments = doctor.appointments.filter(
-      (appointment) => appointment.date == date
+      (appointment) => format(appointment.date, 'yyyy-MM-dd') === date
     )
-    const allAppintmentsTime = allAppintments.map((a) => a.time)
+
+    const allAppintmentsTime = allAppintments.map(
+      (appointment) => appointment.time
+    )
+
     let doctorStartShift = doctor.schedule.start
     let doctorEndShift = doctor.schedule.end
+
     let avalibleSlots = []
     let currentTime = moment(doctorStartShift, 'HH:mm')
 
     while (moment(currentTime).isBefore(moment(doctorEndShift, 'HH:mm'))) {
-      if (!allAppintmentsTime.includes(currentTime)) {
-        avalibleSlots.push(moment(currentTime).format('HH:mm'))
-        currentTime.add(20, 'minutes')
+      const slot = currentTime.format('HH:mm')
+
+      if (!allAppintmentsTime.includes(slot)) {
+        avalibleSlots.push(slot)
       }
+
+      currentTime.add(20, 'minutes')
     }
-    console.log(avalibleSlots)
+
     res.send(avalibleSlots)
   } catch (error) {
     console.log(error)
