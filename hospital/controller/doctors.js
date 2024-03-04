@@ -1,7 +1,7 @@
 const { Doctor, Service, Appointment } = require('../models')
 const { format } = require('date-fns')
-
 const moment = require('moment')
+
 const getDoctors = async (req, res) => {
   try {
     const doctors = await Doctor.find({})
