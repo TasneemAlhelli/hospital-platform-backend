@@ -3,9 +3,26 @@ var router = express.Router()
 const userCtrl = require('../controller/user')
 const middleware = require('../middleware')
 
-router.get('/user', userCtrl.getUserInfo)
+router.get(
+  '/user/appointments',
+  middleware.stripToken,
+  middleware.verifyToken,
+  userCtrl.getAppointments
+)
+router.get(
+  '/user/appointments/:status',
+  middleware.stripToken,
+  middleware.verifyToken,
+  userCtrl.appointmentStatus
+)
+
+router.get(
+  '/user',
+  middleware.stripToken,
+  middleware.verifyToken,
+  userCtrl.getUserInfo
+)
 router.put('/user/:userId', userCtrl.updateUserInfo)
-router.get('/user/:userId/appointments', userCtrl.getAppointments)
 router.post(
   '/user/appointment',
   middleware.stripToken,
@@ -13,9 +30,10 @@ router.post(
   userCtrl.addAppointment
 )
 router.delete(
-  '/user/:userId/appointment/:appoimentId',
+  '/user/appointment/:appoimentId',
+  middleware.stripToken,
+  middleware.verifyToken,
   userCtrl.deleteAppointment
 )
-router.get('/user/appointments/:status', userCtrl.appointmentStatus)
 
 module.exports = router
