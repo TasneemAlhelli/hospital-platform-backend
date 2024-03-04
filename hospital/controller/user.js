@@ -1,9 +1,17 @@
 const { format } = require('date-fns')
 const { User, Appointment, Doctor } = require('../models')
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
+const APP_SECRET = process.env.APP_SECRET
 
 const getUserInfo = async (req, res) => {
   try {
-    const user = await User.findById(res.locals.payload.id)
+    const { token } = res.locals
+    // console.log('token', token)
+    let payload = jwt.verify(token, APP_SECRET)
+    let userId = payload.id
+    const user = await User.findById(userId)
+    // console.log(user)
     res.send(user)
   } catch (error) {
     console.log(error)
@@ -12,7 +20,13 @@ const getUserInfo = async (req, res) => {
 
 const updateUserInfo = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body)
+    const { token } = res.locals
+    console.log('token', token)
+    let payload = jwt.verify(token, APP_SECRET)
+    let userId = payload.id
+    const user = await User.findById(userId)
+    console.log('req.body', req.body)
+    await user.updateOne(req.body)
     res.send(user)
   } catch (error) {
     console.log(error)
@@ -31,8 +45,15 @@ const getAppointments = async (req, res) => {
 
 const appointmentStatus = async (req, res) => {
   try {
-    const userId = res.locals.payload.id
-    const user = await User.findById(userId).populate('appointments')
+    const { token } = res.locals
+    let payload = jwt.verify(token, APP_SECRET)
+    let userId = payload.id
+    const user = await User.findById(userId).populate({
+      path: 'appointments',
+      populate: {
+        path: 'doctor'
+      }
+    })
     const today = format(new Date(), 'yyyy-MM-dd')
 
     let apps = user.appointments.filter((appointment) => {
@@ -72,13 +93,18 @@ const addAppointment = async (req, res) => {
 
 const deleteAppointment = async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId)
+    const { token } = res.locals
+    console.log('token', token)
+    let payload = jwt.verify(token, APP_SECRET)
+    let userId = payload.id
+    const user = await User.findById(userId)
     const deletedappointmentIndex = user.appointments.findIndex(
       (appointment) => appointment == `objectId('${req.params.appoimentId}')`
     )
     user.appointments.splice(deletedappointmentIndex, 1)
     await user.save()
     //await Appointment.deleteOne({ _id: req.params.appoimentId })
+    console.log(user)
     res.send(user)
   } catch (error) {
     console.log(error)

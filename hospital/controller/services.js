@@ -13,30 +13,25 @@ const getservices = async (req, res) => {
 }
 const filterServices = async (req, res) => {
   try {
-    const { token } = res.locals
-    let payload = jwt.verify(token, APP_SECRET)
-    let userId = payload.id
-    const user = await User.findById(userId)
+    const token = req.headers['authorization']?.split(' ')[1]
+    if (token) {
+      console.log('token', token)
+      let payload = jwt.verify(token, APP_SECRET)
+      let userId = payload.id
+      const user = await User.findById(userId)
+      console.log(user)
+      const filterServices = await Service.find({
+        minAge: { $lte: payload.age },
+        maxAge: { $gte: payload.age },
+        specialization: { $in: [...user.medicalConditions, 'other'] },
+        $or: [{ gender: 'All' }, { gender: user.gender }]
+      })
 
-    let currentDate = new Date()
-    let birthDate = new Date(user.birthDate)
-    let timeDiff = currentDate.getTime() - birthDate.getTime()
-    let age = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 365.25))
-
-    let filter = {
-      minAge: { $lte: age },
-      $or: [{ maxAge: { $gte: age } }, { maxAge: null }],
-      $or: [{ gender: 'All' }, { gender: user.gender }]
-      // specialization: {
-      //   $in:
-      //     user.medicalConditions.length > 0
-      //       ? [user.medicalConditions, 'other']
-      //       : 'other'
-      // }
+      res.send(filterServices)
+      // console.log('filterServices', filterServices)
+    } else {
+      console.log('token not find')
     }
-
-    const filterServices = await Service.find(filter).limit(4)
-    res.send(filterServices)
   } catch (error) {
     console.log(error)
   }

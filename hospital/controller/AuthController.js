@@ -28,11 +28,20 @@ const Login = async (req, res) => {
       user.passwordDigest,
       password
     )
+    let currentDate = new Date()
+    birthDate = new Date(user.birthDate)
+    let timeDiff = currentDate.getTime() - birthDate.getTime()
+    let age = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 365.25))
     if (matched) {
       let payload = {
-        id: user.id,
+        id: user._id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        age: age,
+        cpr: user.cpr,
+        gender: user.gender,
+        birthDate: user.birthDate,
+        medicalConditions: user.medicalConditions
       }
       let token = middleware.createToken(payload)
       return res.send({ user: payload, token })

@@ -15,8 +15,19 @@ router.get(
   middleware.verifyToken,
   userCtrl.appointmentStatus
 )
-router.get('/user/:userId', userCtrl.getUserInfo)
-router.put('/user/:userId', userCtrl.updateUserInfo)
+
+router.get(
+  '/user',
+  middleware.stripToken,
+  middleware.verifyToken,
+  userCtrl.getUserInfo
+)
+router.put(
+  '/user',
+  middleware.stripToken,
+  middleware.verifyToken,
+  userCtrl.updateUserInfo
+)
 router.post(
   '/user/appointment',
   middleware.stripToken,
@@ -24,7 +35,9 @@ router.post(
   userCtrl.addAppointment
 )
 router.delete(
-  '/user/:userId/appointment/:appoimentId',
+  '/user/appointment/:appoimentId',
+  middleware.stripToken,
+  middleware.verifyToken,
   userCtrl.deleteAppointment
 )
 

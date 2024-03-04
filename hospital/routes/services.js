@@ -4,10 +4,11 @@ const servicesCtrl = require('../controller/services')
 const middleware = require('../middleware')
 
 router.get('/', servicesCtrl.getservices)
+
 router.get(
   '/filter',
-  middleware.stripToken,
-  middleware.verifyToken,
+  //   middleware.stripToken,
+  //   middleware.verifyToken,
   servicesCtrl.filterServices
 )
 
