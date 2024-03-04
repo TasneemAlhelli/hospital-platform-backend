@@ -13,6 +13,23 @@ const create = async (req, res) => {
   }
 }
 
+const getReviewsByDoctor = async (req, res) => {
+  try {
+    const reviews = await Review.find({ doctor: req.params.doctorId }).populate(
+      {
+        path: 'appointment',
+        populate: {
+          path: 'user'
+        }
+      }
+    )
+    res.send(reviews)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 module.exports = {
-  create
+  create,
+  getReviewsByDoctor
 }

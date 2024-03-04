@@ -9,5 +9,5 @@ router.post(
   middleware.verifyToken,
   reviewsCtrl.create
 )
-
+router.get('/:doctorId', reviewsCtrl.getReviewsByDoctor)
 module.exports = router
