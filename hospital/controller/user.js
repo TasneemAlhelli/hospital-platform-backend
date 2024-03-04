@@ -51,6 +51,7 @@ const appointmentStatus = async (req, res) => {
 }
 const addAppointment = async (req, res) => {
   try {
+    req.body.user = res.locals.payload.id
     const newAppointment = await Appointment.create(req.body)
 
     const userId = res.locals.payload.id
