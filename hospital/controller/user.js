@@ -20,7 +20,12 @@ const getUserInfo = async (req, res) => {
 
 const updateUserInfo = async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId)
+    const { token } = res.locals
+    console.log('token', token)
+    let payload = jwt.verify(token, APP_SECRET)
+    let userId = payload.id
+    const user = await User.findById(userId)
+    console.log('req.body', req.body)
     await user.updateOne(req.body)
     res.send(user)
   } catch (error) {

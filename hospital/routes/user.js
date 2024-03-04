@@ -22,7 +22,12 @@ router.get(
   middleware.verifyToken,
   userCtrl.getUserInfo
 )
-router.put('/user/:userId', userCtrl.updateUserInfo)
+router.put(
+  '/user',
+  middleware.stripToken,
+  middleware.verifyToken,
+  userCtrl.updateUserInfo
+)
 router.post(
   '/user/appointment',
   middleware.stripToken,
