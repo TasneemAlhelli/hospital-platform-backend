@@ -41,20 +41,23 @@ const filterServices = async (req, res) => {
   try {
     const token = req.headers['authorization']?.split(' ')[1]
     if (token) {
-      console.log('token', token)
       let payload = jwt.verify(token, APP_SECRET)
       let userId = payload.id
       const user = await User.findById(userId)
-      console.log(user)
-      const filterServices = await Service.find({
+
+      let filter = {
         minAge: { $lte: payload.age },
-        maxAge: { $gte: payload.age },
-        specialization: { $in: [...user.medicalConditions, 'other'] },
+        $or: [
+          { specialization: user.medicalConditions },
+          { specialization: 'other' }
+        ],
+        $or: [{ maxAge: { $gte: payload.age } }, { maxAge: null }],
         $or: [{ gender: 'All' }, { gender: user.gender }]
-      })
+      }
+
+      const filterServices = await Service.find(filter).limit(4)
 
       res.send(filterServices)
-      // console.log('filterServices', filterServices)
     } else {
       console.log('token not find')
     }
