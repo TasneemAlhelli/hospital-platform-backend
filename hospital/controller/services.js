@@ -1,34 +1,63 @@
-const { Service, User } = require('../models')
+const { Service, User, Review } = require('../models')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const APP_SECRET = process.env.APP_SECRET
 
-const getservices = async (req, res) => {
+const getDoctorReviews = async (doctors = []) => {
   try {
-    const services = await Service.find({}).populate('doctors')
-    res.send(services)
+    let doctorReviews = []
+
+    if (doctors.length > 0) {
+      doctorReviews.push({
+        $match: { doctor: { $in: doctors } }
+      })
+    }
+
+    doctorReviews.push({
+      $group: {
+        _id: '$doctor',
+        avgRating: { $avg: '$rate' }
+      }
+    })
+
+    doctorReviews = await Review.aggregate(doctorReviews)
+    return doctorReviews
   } catch (error) {
     console.log(error)
   }
 }
+
+const getservices = async (req, res) => {
+  try {
+    const services = await Service.find({}).populate('doctors')
+    const doctorReviews = await getDoctorReviews()
+    res.send({ services, doctorReviews })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const filterServices = async (req, res) => {
   try {
     const token = req.headers['authorization']?.split(' ')[1]
     if (token) {
-      console.log('token', token)
       let payload = jwt.verify(token, APP_SECRET)
       let userId = payload.id
       const user = await User.findById(userId)
-      console.log(user)
-      const filterServices = await Service.find({
+
+      let filter = {
         minAge: { $lte: payload.age },
-        maxAge: { $gte: payload.age },
-        specialization: { $in: [...user.medicalConditions, 'other'] },
+        $or: [
+          { specialization: user.medicalConditions },
+          { specialization: 'other' }
+        ],
+        $or: [{ maxAge: { $gte: payload.age } }, { maxAge: null }],
         $or: [{ gender: 'All' }, { gender: user.gender }]
-      })
+      }
+
+      const filterServices = await Service.find(filter).limit(4)
 
       res.send(filterServices)
-      // console.log('filterServices', filterServices)
     } else {
       console.log('token not find')
     }
@@ -39,7 +68,9 @@ const filterServices = async (req, res) => {
 const getservice = async (req, res) => {
   try {
     const service = await Service.findById(req.params.id).populate('doctors')
-    res.send(service)
+    const doctorIds = service.doctors.map((doctor) => doctor._id)
+    const doctorReviews = await getDoctorReviews(doctorIds)
+    res.send({ service, doctorReviews })
   } catch (error) {
     console.log(error)
   }
