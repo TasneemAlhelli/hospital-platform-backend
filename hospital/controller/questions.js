@@ -7,9 +7,11 @@ const index = async (req, res) => {
   } catch (error) {}
 }
 
-const createQuestion = async () => {
+const createQuestion = async (req, res) => {
   try {
-    await Question.create(req.body)
+    req.body.user = res.locals.payload.id
+    const newQuestion = await Question.create(req.body)
+    res.send(newQuestion)
   } catch (error) {}
 }
 
