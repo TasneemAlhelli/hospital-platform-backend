@@ -26,10 +26,12 @@ const createQuestion = async (req, res) => {
 
 const answerToQuestion = async (req, res) => {
   try {
+    console.log(req.body, 'req.body')
     let question = await Question.findById(req.params.questionId)
-    const updatedQuestion = await Question.updateOne({
+    const updatedQuestion = await question.updateOne({
       answer: req.body.answer
     })
+
     const questions = await Question.find({})
       .populate('user')
       .populate('service')
