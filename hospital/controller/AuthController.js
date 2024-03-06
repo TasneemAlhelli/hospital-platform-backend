@@ -38,10 +38,7 @@ const Login = async (req, res) => {
         email: user.email,
         name: user.name,
         age: age,
-        cpr: user.cpr,
-        gender: user.gender,
-        birthDate: user.birthDate,
-        medicalConditions: user.medicalConditions
+        role: user.role
       }
       let token = middleware.createToken(payload)
       return res.send({ user: payload, token })
@@ -55,6 +52,7 @@ const Login = async (req, res) => {
 
 const CheckSession = async (req, res) => {
   const { payload } = res.locals
+  console.log('payload', payload)
   res.send(payload)
 }
 

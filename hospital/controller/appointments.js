@@ -13,9 +13,8 @@ const getAppointments = async (req, res) => {
 
 const appointmentStatus = async (req, res) => {
   try {
-    const { token } = res.locals
-    let payload = jwt.verify(token, APP_SECRET)
-    let userId = payload.id
+    const userId = res.locals.payload.id
+
     const user = await User.findById(userId).populate({
       path: 'appointments',
       populate: {
@@ -61,10 +60,8 @@ const addAppointment = async (req, res) => {
 
 const deleteAppointment = async (req, res) => {
   try {
-    const { token } = res.locals
-    console.log('token', token)
-    let payload = jwt.verify(token, APP_SECRET)
-    let userId = payload.id
+    const userId = res.locals.payload.id
+
     const user = await User.findById(userId)
     const deletedappointmentIndex = user.appointments.findIndex(
       (appointment) => appointment == `objectId('${req.params.appoimentId}')`

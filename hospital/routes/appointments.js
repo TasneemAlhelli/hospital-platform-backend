@@ -6,25 +6,25 @@ router.get(
   '/user/appointments',
   middleware.stripToken,
   middleware.verifyToken,
-  userCtrl.getAppointments
+  appointmentsCtrl.getAppointments
 )
 router.get(
   '/user/appointments/:status',
   middleware.stripToken,
   middleware.verifyToken,
-  userCtrl.appointmentStatus
+  appointmentsCtrl.appointmentStatus
 )
 router.post(
   '/user/appointment',
   middleware.stripToken,
   middleware.verifyToken,
-  userCtrl.addAppointment
+  appointmentsCtrl.addAppointment
 )
 router.delete(
   '/user/appointment/:appoimentId',
   middleware.stripToken,
   middleware.verifyToken,
-  userCtrl.deleteAppointment
+  appointmentsCtrl.deleteAppointment
 )
 
 module.exports = router
