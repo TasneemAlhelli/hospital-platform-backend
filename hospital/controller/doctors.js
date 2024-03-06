@@ -39,14 +39,22 @@ const doctorSlot = async (req, res) => {
 
     const doctor = await Doctor.findById(req.params.id).populate('appointments')
 
-    const allApointments = doctor.appointments.filter(
-      (appointment) => format(appointment.date, 'yyyy-MM-dd') === date
-    )
+    // const allApointments = doctor.appointments.filter(
+    //   (appointment) => format(appointment.date, 'yyyy-MM-dd') === date
+    // )
 
-    const allApointmentsTime = allApointments.map(
-      (appointment) => appointment.time
+    // const allApointmentsTime = allApointments.map(
+    //   (appointment) => appointment.time
+    // )
+    const allApointmentsTime = doctor.appointments.reduce(
+      (acc, appointment) => {
+        if (format(appointment.date, 'yyyy-MM-dd') === date) {
+          acc.push(appointment.time)
+        }
+        return acc
+      },
+      []
     )
-
     let doctorStartShift = doctor.schedule.start
     let doctorEndShift = doctor.schedule.end
 
