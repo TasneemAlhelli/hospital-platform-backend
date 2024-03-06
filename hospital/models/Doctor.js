@@ -3,10 +3,9 @@ const { Schema } = require('mongoose')
 const doctorSchema = new Schema(
   {
     image: String,
-    name: String,
-    email: String,
-    specialization: String,
-    experience: String,
+    name: { type: String, require },
+    email: { type: String, require },
+    experience: Number,
     phone: String,
     gender: {
       type: String,

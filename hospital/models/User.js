@@ -3,8 +3,8 @@ const { Schema } = require('mongoose')
 const userSchema = new Schema(
   {
     image: String,
-    name: String,
-    email: String,
+    name: { type: String, require },
+    email: { type: String, require },
     passwordDigest: String,
     cpr: Number,
     role: { type: String, enum: ['Admin', 'User'], default: 'User' },
@@ -31,7 +31,8 @@ const userSchema = new Schema(
         'Occupational Therapy',
         'Allergology',
         'other'
-      ]
+      ],
+      default: 'other'
     }
   },
   {

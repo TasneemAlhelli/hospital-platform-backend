@@ -3,8 +3,8 @@ const { Schema } = require('mongoose')
 const serviceSchema = new Schema(
   {
     image: String,
-    name: String,
-    description: String,
+    name: {type: String, require},
+    description: {type: String, require},
     phone: String,
     price: Number,
     doctors: [{ type: Schema.Types.ObjectId, ref: 'Doctor' }],

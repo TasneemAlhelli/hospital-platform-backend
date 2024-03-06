@@ -4,10 +4,10 @@ const appointmentSchema = new Schema(
   {
     doctor: { type: Schema.Types.ObjectId, ref: 'Doctor' },
     user: { type: Schema.Types.ObjectId, ref: 'User' },
-    date: Date,
-    time: String,
+    date: { type: Date, require },
+    time: { type: String, require },
     notes: String,
-    complated: Boolean
+    completed: { type: Boolean, default: false }
   },
   {
     timestamps: true
