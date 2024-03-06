@@ -24,7 +24,7 @@ router.delete(
   '/user/appointment/:appoimentId',
   middleware.stripToken,
   middleware.verifyToken,
-  userCtrl.deleteAppointment
+  appointmentsCtrl.deleteAppointment
 )
 
 module.exports = router
