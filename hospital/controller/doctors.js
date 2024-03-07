@@ -39,13 +39,6 @@ const doctorSlot = async (req, res) => {
 
     const doctor = await Doctor.findById(req.params.id).populate('appointments')
 
-    // const allApointments = doctor.appointments.filter(
-    //   (appointment) => format(appointment.date, 'yyyy-MM-dd') === date
-    // )
-
-    // const allApointmentsTime = allApointments.map(
-    //   (appointment) => appointment.time
-    // )
     const allApointmentsTime = doctor.appointments.reduce(
       (acc, appointment) => {
         if (format(appointment.date, 'yyyy-MM-dd') === date) {
